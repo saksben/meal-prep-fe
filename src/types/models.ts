@@ -3,7 +3,7 @@ export type User = {
   name: string;
   mealPlans: MealPlan[];
   groceryList: GroceryList[];
-  goals: Goal[];
+  goal?: Goal;
 };
 
 export type Ingredient = {
@@ -40,6 +40,13 @@ export type Filter = {
 export type Goal = {
   id: number;
   name: string;
+  calories: number;
+  carbohydrates: number;
+  fat: number;
+  protein: number;
+  price?: number;
+  user?: User;
+  userId?: User;
   meals: Meal[];
 };
 
