@@ -62,25 +62,25 @@ export async function getIngredients() {
   return await request<Ingredient[]>("/ingredients");
 }
 
-export async function getIngredient(id: number) {
+export async function getIngredient(id: string | string[]) {
   return await request<Ingredient>(`/ingredients/${id}`);
 }
 
 export async function createIngredient(data: Partial<Ingredient>) {
-  return await request<Ingredient>("ingredients", {
+  return await request<Ingredient>("/ingredients", {
     method: "POST",
     body: JSON.stringify(data),
   });
 }
 
-export async function updateIngredient(id: number, data: Partial<Ingredient>) {
+export async function updateIngredient(id: string | string[], data: Partial<Ingredient>) {
   return await request<Ingredient>(`/ingredients/${id}`, {
     method: "PATCH",
     body: JSON.stringify(data),
   });
 }
 
-export async function deleteIngredient(id: number) {
+export async function deleteIngredient(id: string | string[]) {
   return await request<void>(`/ingredients/${id}`, {
     method: "DELETE",
   });

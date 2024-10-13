@@ -13,14 +13,15 @@ export type User = {
 export type Ingredient = {
   id: number;
   name: string;
-  unit: string;
-  amount: number;
+  defaultUnit: string;
+  defaultAmount: number;
+  servings: { amount: number; unit: string };
   calories: number;
   carbohydrates: number;
   fat: number;
   protein: number;
   price?: number;
-//   meals: MealIngredient[];
+  //   meals: MealIngredient[];
 };
 
 export type Meal = {
