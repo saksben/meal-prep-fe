@@ -1,9 +1,13 @@
 export type User = {
   id: number;
   name: string;
+  calories: number;
+  carbohydrates: number;
+  fat: number;
+  protein: number;
+  price?: number;
   mealPlans: MealPlan[];
   groceryList: GroceryList[];
-  goal?: Goal;
 };
 
 export type Ingredient = {
@@ -37,27 +41,12 @@ export type Filter = {
   meals: Meal[];
 };
 
-export type Goal = {
-  id: number;
-  name: string;
-  calories: number;
-  carbohydrates: number;
-  fat: number;
-  protein: number;
-  price?: number;
-  user?: User;
-  userId?: User;
-  meals: Meal[];
-};
-
 export type MealPlan = {
   id: number;
   name: string;
   user: User;
   userId: number;
   frequency: string;
-  goal?: Goal;
-  goalId?: number;
   meals: Meal[];
   groceryLists: GroceryList[];
 };

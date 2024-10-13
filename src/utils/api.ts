@@ -3,12 +3,14 @@ import {
   User,
   Meal,
   Filter,
-  Goal,
   MealPlan,
   GroceryList,
 } from "@/types/models";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+// const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+// const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+// const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3002";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3003";
 
 // Helper function to handle requests
 async function request<T>(url: string, options: RequestInit = {}): Promise<T> {
@@ -31,7 +33,7 @@ export async function getUsers() {
   return await request<User[]>("/users");
 }
 
-export async function getUser(id: number) {
+export async function getUser(id: string | string[]) {
   return await request<User>(`/users/${id}`);
 }
 
@@ -42,17 +44,14 @@ export async function createUser(data: Partial<User>) {
   });
 }
 
-export async function updateUser(id: number, data: Partial<User>) {
-  return (
-    await request<User>(`/users/${id}`),
-    {
-      method: "PATCH",
-      body: JSON.stringify(data),
-    }
-  );
+export async function updateUser(id: string | string[], data: Partial<User>) {
+  return await request<User>(`/users/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
 }
 
-export async function deleteUser(id: number) {
+export async function deleteUser(id: string | string[]) {
   return await request<void>(`/users/${id}`, {
     method: "DELETE",
   });
@@ -141,35 +140,6 @@ export async function updateFilter(id: number, data: Partial<Filter>) {
 
 export async function deleteFilter(id: number) {
   return await request<void>(`/filters/${id}`, {
-    method: "DELETE",
-  });
-}
-
-// CRUD for Goal
-export async function getGoals() {
-  return await request<Goal[]>("/goals");
-}
-
-export async function getGoal(id: number) {
-  return await request<Goal>(`/goals/${id}`);
-}
-
-export async function createGoal(data: Partial<Goal>) {
-  return await request<Goal>("/goals", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
-}
-
-export async function updateGoal(id: number, data: Partial<Goal>) {
-  return await request<Goal>(`/goals/${id}`, {
-    method: "PATCH",
-    body: JSON.stringify(data),
-  });
-}
-
-export async function deleteGoal(id: number) {
-  return await request<Goal>(`/goals/${id}`, {
     method: "DELETE",
   });
 }
