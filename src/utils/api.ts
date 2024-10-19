@@ -91,7 +91,7 @@ export async function getMeals() {
   return await request<Meal[]>("/meals");
 }
 
-export async function getMeal(id: number) {
+export async function getMeal(id: string | string[]) {
   return await request<Meal>(`/meals/${id}`);
 }
 
@@ -102,14 +102,15 @@ export async function createMeal(data: Partial<Meal>) {
   });
 }
 
-export async function updateMeal(id: number, data: Partial<Meal>) {
+export async function updateMeal(id: string | string[], data: Partial<Meal>) {
+  console.log('Updating meal with data:', data)
   return await request<Meal>(`/meals/${id}`, {
     method: "PATCH",
     body: JSON.stringify(data),
   });
 }
 
-export async function deleteMeal(id: number) {
+export async function deleteMeal(id: string | string[]) {
   return await request<void>(`/meals/${id}`, {
     method: "DELETE",
   });

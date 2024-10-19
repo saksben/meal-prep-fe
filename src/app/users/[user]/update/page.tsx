@@ -28,6 +28,7 @@ const UpdateUserPage = () => {
         setProtein(res.protein);
         setPrice(res.price);
       } catch (err) {
+        console.log('Error:', err)
         setError("Failed to load user data.");
       }
     };

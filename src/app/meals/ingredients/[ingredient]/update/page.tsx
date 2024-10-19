@@ -218,7 +218,7 @@ const UpdateIngredientPage = () => {
             disabled={loading}
             className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md"
           >
-            {loading ? "Creating..." : "Create Ingredient"}
+            {loading ? "Updating..." : "Update Ingredient"}
           </button>
         </form>
       ) : (

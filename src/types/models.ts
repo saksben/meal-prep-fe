@@ -1,3 +1,9 @@
+export type MealIngredient = {
+  mealId: number;
+  ingredientId: number;
+  // ingredient: Ingredient;
+};
+
 export type User = {
   id: number;
   name: string;
@@ -21,7 +27,6 @@ export type Ingredient = {
   fat: number;
   protein: number;
   price?: number;
-  //   meals: MealIngredient[];
 };
 
 export type Meal = {
@@ -30,10 +35,10 @@ export type Meal = {
   description: string;
   recipe: string;
   servings: number;
-  recipeLink: string;
-  filters: Filter[];
-  mealPlans: MealPlan[];
-  ingredients: Ingredient[];
+  recipeLink?: string;
+  // filters: Filter[];
+  // mealPlans: MealPlan[];
+  ingredients: MealIngredient[];
 };
 
 export type Filter = {

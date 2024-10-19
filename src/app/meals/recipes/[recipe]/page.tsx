@@ -1,73 +1,69 @@
 "use client";
-
-import { Ingredient } from "@/types/models";
-import { deleteIngredient, getIngredient } from "@/utils/api";
+import { deleteMeal, getMeal } from "@/utils/api";
 import Link from "next/link";
+// TODO: add time to db schema
+// TODO: back button
+// TODO: directions are just textareas with a "Add a step" button, then a for loop that makes each textarea an <li> in the directions
+// TODO: add interface to get rid of errors on Recipe and ingredient
+
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-
-// TODO: back button
 
 // TODO: add picture
 // TODO: add pie chart
 // TODO: add serving logic
 
-const IngredientPage = () => {
+const Recipe = () => {
   const params = useParams();
-  const [ingredientData, setIngredientData] = React.useState<Ingredient | null>(
-    null
-  );
-  const [scale, setScale] = React.useState<string>('')
+  const [recipeData, setRecipeData] = React.useState<Recipe | null>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
-  const ingredientId = params.ingredient;
+  const recipeId = params.recipe;
   const router = useRouter();
 
   React.useEffect(() => {
-    const getIngredientData = async () => {
+    const getRecipeData = async () => {
       try {
-        const data = await getIngredient(ingredientId);
-        setIngredientData(data);
-        setScale(data.defaultUnit)
+        const data = await getMeal(recipeId);
+        setRecipeData(data);
       } catch (error) {
-        console.error("Error fetching ingredient data:", error);
+        console.error("Error fetching recipe data:", error);
       }
     };
-    getIngredientData();
-  }, [ingredientId]);
+    getRecipeData();
+  }, [recipeId]);
 
-  if (!ingredientData) {
+  if (!recipeData) {
     return <div>Loading...</div>;
   }
 
-  // Delete ingredient
-  const removeIngredient = async (id: string | string[]) => {
+  // Delete recipe
+  const removeRecipe = async (id: string | string[]) => {
     setLoading(true);
     setError(null);
 
     try {
-      await deleteIngredient(id);
+      await deleteMeal(id);
     } catch (err) {
       console.error("Error:", err);
-      setError("Failed to delete ingredient. Please try again.");
+      setError("Failed to delete recipe. Please try again.");
     } finally {
       setLoading(false);
-      router.push("/meals/ingredients");
+      router.push("/meals");
     }
   };
 
   const {
     name,
-    defaultUnit,
-    defaultAmount,
+    description,
+    recipe,
     servings,
-    calories,
-    carbohydrates,
-    fat,
-    protein,
-    price,
-  } = ingredientData;
-
+    recipeLink,
+    filters,
+    mealPlans,
+    ingredients,
+  } = recipeData;
+  console.log("ingredients:", ingredients);
   return (
     <div className="flex-col w-full">
       {/* Header */}
@@ -79,17 +75,17 @@ const IngredientPage = () => {
       </div>
       {error && <p className="text-red-500">{error}</p>}
       <Link
-        href={`/meals/ingredients/${ingredientId}/update`}
+        href={`/meals/recipes/${recipeId}/update`}
         className="p-2 bg-neutral-500 rounded mr-4"
       >
-        Update Ingredient
+        Update Recipe
       </Link>
       <button
         className="p-2 bg-red-500 rounded mb-4"
-        onClick={() => removeIngredient(ingredientId)}
+        onClick={() => removeRecipe(recipeId)}
         disabled={loading}
       >
-        Delete Ingredient
+        Delete Recipe
       </button>
       {/* Main */}
       <div className="flex gap-[4rem] h-full w-full">
@@ -101,27 +97,23 @@ const IngredientPage = () => {
           {/* Macro pie chart */}
           <div className="rounded-full size-[15rem] border"></div>
           <div className="text-sm flex flex-col gap-4">
-            <h3>{`For ${defaultAmount} ${defaultUnit}`}</h3>
+            <h3>For {servings} serving</h3>
             <div>
               <div className="flex justify-between">
-                <span>Price</span>
-                <span>${price}</span>
-              </div>
-              <div className="flex justify-between">
                 <span>Calories</span>
-                <span>{calories}</span>
+                <span>373</span>
               </div>
               <div className="flex justify-between">
                 <span>Carbs</span>
-                <span>{`${carbohydrates}g`}</span>
+                <span>373g</span>
               </div>
               <div className="flex justify-between">
                 <span>Fat</span>
-                <span>{`${fat}g`}</span>
+                <span>373g</span>
               </div>
               <div className="flex justify-between">
                 <span>Protein</span>
-                <span>{`${protein}g`}</span>
+                <span>373g</span>
               </div>
             </div>
           </div>
@@ -129,19 +121,40 @@ const IngredientPage = () => {
         {/* Details */}
         <div className="w-1/2 max-w-[30rem] h-full px-[2rem] flex flex-col gap-10">
           <div>
-            <h2 className="text-xl font-semibold">Scale Ingredient</h2>
-            <input
-              className="w-[3rem] mr-2 text-black"
-              placeholder={`${defaultAmount}`}
-            />
-            <select value={defaultUnit} onChange={(e) => setScale(e.target.value)} className="text-black">
-              <option className="text-black">{defaultUnit}</option>
-            </select>
+            <div className="flex gap-4">
+              <span>Prep Time</span>
+              <span>15 minutes</span>
+            </div>
+            <div className="flex gap-4">
+              <span>Cook Time</span>
+              <span>15 minutes</span>
+            </div>
           </div>
+          <div>
+            <h2 className="text-xl font-semibold">Scale Recipe</h2>
+            <input
+              className="w-[3rem] mr-2 text-black placeholder:text-black"
+              placeholder={servings}
+            />
+            <span>serving</span>
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold">Ingredients</h2>
+            {ingredients.map((ingredient) => (
+              <p key={ingredient.ingredient.id}>
+                {ingredient.ingredient.name} -{" "}
+                {ingredient.ingredient.defaultAmount}{" "}
+                {ingredient.ingredient.defaultUnit}
+              </p>
+            ))}
+            {console.log(ingredients)}
+          </div>
+          <h2 className="text-xl font-semibold">Directions</h2>
+          <p>{recipe}</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default IngredientPage;
+export default Recipe;

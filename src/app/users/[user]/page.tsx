@@ -40,10 +40,11 @@ const UserPage = () => {
     try {
       await deleteUser(id);
     } catch (err) {
+      console.error("Error:", err);
       setError("Failed to delete user. Please try again.");
     } finally {
       setLoading(false);
-      router.push('/users')
+      router.push("/users");
     }
   };
 
@@ -54,6 +55,7 @@ const UserPage = () => {
       <h1 className="text-xl font-semibold text-blue-400 mb-4">
         {name}&#39;s Target Daily Nutrition
       </h1>
+      {error && <p className="text-red-500">{error}</p>}
       <Link
         href={`/users/${userId}/update`}
         className="p-2 bg-neutral-500 rounded mr-4"
